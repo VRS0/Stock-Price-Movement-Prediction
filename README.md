@@ -1,47 +1,54 @@
-# 📈 Stock Price Prediction
-A machine learning project that predicts whether a stock price will go **up or down** the next day — framed as a binary classification problem.
+# 📈 Stock Price Movement Prediction
+
+Binary classification system for predicting next-day stock price direction using engineered technical indicators and machine learning.
 
 ---
 
-##  What It Does
-Given historical stock data, the model outputs:
+## Overview
 
-| Label | Meaning |
-|-------|---------|
-| `1` | Price going **up** → Buy signal |
-| `0` | Price going **down** → Skip |
+This project frames next-day price movement as a binary classification task — up or down — built on a pipeline of feature engineering, time-series-aware data splitting, and multi-model benchmarking to identify the most reliable trading signal.
 
 ---
 
-##  Features
-Built from raw price data using common technical indicators:
+## Technical Indicators
 
-- **Moving Averages (MA)** — smooths out short-term noise to reveal the trend
-- **Daily Returns** — measures the day-to-day percentage change in price
-- **RSI (Relative Strength Index)** — detects overbought or oversold conditions
-- **Lagged Returns** — uses yesterday's movement as a predictive signal
-
----
-
-##  Models Trained
-Three classifiers were trained and compared:
-
-- Logistic Regression
-- Decision Tree
-- Random Forest
-
-The best performer was selected based on accuracy on the test set.
+| Indicator | Description |
+|-----------|-------------|
+| RSI | Relative Strength Index — momentum oscillator |
+| Daily Return | Percentage change in closing price day-over-day |
+| Volume Ratio | Current volume relative to rolling average |
+| Moving Averages | Short and long-term trend signals (SMA/EMA) |
+| HL Range | High-Low spread as a volatility proxy |
 
 ---
 
-##  Results
-The final model predicts next-day stock direction with **~70% accuracy** — a solid baseline for a binary market prediction task.
+## Methodology
 
->  Educational Project
+- **Target Variable** — Binary label derived from next-day closing price direction, with temporal shifting applied to prevent data leakage
+- **Data Splitting** — Time-series-aware partitioning with no random shuffling to preserve chronological order and reflect real trading conditions
+- **EDA** — Distribution analysis on engineered features and closing price trend visualization across the full time horizon
 
 ---
 
-##  Future Improvements
-- Add more technical indicators (MACD, Bollinger Bands)
-- Try LSTM for sequence-based prediction
-- Backtest on multiple stocks and timeframes
+## Models
+
+Six models trained and benchmarked against the same temporal train/test split:
+
+| Model | Type |
+|-------|------|
+| Logistic Regression | Linear baseline |
+| Random Forest | Ensemble / bagging |
+| Support Vector Machine | Kernel-based classifier |
+| K-Nearest Neighbors | Instance-based learner |
+| Decision Tree | Interpretable tree |
+| Sequential Neural Network | Custom deep learning (Keras) |
+
+Models evaluated on accuracy, precision, recall, and F1-score to assess trading signal reliability.
+
+---
+
+## Notes
+
+- All features are computed using only past data relative to each row to eliminate lookahead bias
+- Scaling is fit exclusively on the training set and applied to the test set
+- Model selection prioritizes precision over raw accuracy given the cost asymmetry in trading signals
